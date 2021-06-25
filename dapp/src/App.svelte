@@ -70,11 +70,13 @@
 </style>
 
 <script lang="ts">
+
   import { Router, Route } from 'svelte-navigator';
   import {
     Address,
     Connect,
     Ethereum,
+    Instagram,
     Faq,
     Twitter,
     BasicProfile,
@@ -90,6 +92,9 @@
     BasicProfileContext,
     EthereumAddressControl,
     EthereumControl,
+    InstagramVerification,
+    InstagramVerificationPublicPost,
+    PostUrl,
     Wallet,
     TwitterVerification,
     TwitterVerificationPublicTweet,
@@ -116,23 +121,12 @@
 </script>
 
 <Router>
+  <!-- Unprotected -->
   <Route path="/">
     <Splash />
   </Route>
-  <Route path="/connect">
-    <Connect />
-  </Route>
   <Route path="faq">
     <Faq />
-  </Route>
-  <Route path="twitter">
-    <Twitter />
-  </Route>
-  <Route path="basic-profile">
-    <BasicProfile />
-  </Route>
-  <Route path="ethereum">
-    <Ethereum />
   </Route>
   <Route path="terms-of-service">
     <TermsOfService />
@@ -140,9 +134,30 @@
   <Route path="privacy-policy">
     <PrivacyPolicy />
   </Route>
+
+  <!-- Logged in Routes -->
+  <Route path="/connect">
+    <Connect />
+  </Route>
   <Route path="deploy">
     <Deploy />
   </Route>
+
+  <!-- Claim Creation Forms -->
+  <Route path="basic-profile">
+    <BasicProfile />
+  </Route>
+  <Route path="instagram">
+    <Instagram />
+  </Route>
+  <Route path="ethereum">
+    <Ethereum />
+  </Route>
+  <Route path="twitter">
+    <Twitter />
+  </Route>
+
+  <!-- Viewer Routes -->
   <Route path="search">
     <Search />
   </Route>
@@ -152,9 +167,18 @@
   <Route path="/view/:address">
     <View />
   </Route>
+
+  <!-- Context Files:-->
   <Route path="BasicProfile">
     <BasicProfileContext />
   </Route>
+  <Route path="InstagramVerification">
+    <InstagramVerification />
+  </Route>
+  <Route path="InstagramVerificationPublicPost">
+    <InstagramVerificationPublicPost />
+  </Route>
+
   <Route path="TwitterVerification">
     <TwitterVerification />
   </Route>
@@ -169,6 +193,9 @@
   </Route>
   <Route path="tweetId">
     <TweetId />
+  </Route>
+  <Route path="postUrl">
+    <PostUrl />
   </Route>
   <Route path="EthereumAddressControl">
     <EthereumAddressControl />

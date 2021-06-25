@@ -1,7 +1,6 @@
 import {Kepler, getOrbitId} from 'kepler-sdk';
 
 export const addToKepler = async (kepler: Kepler, orbit: string, ...obj: Array<any>) => {
-  obj.forEach((o) => console.log(o));
   if (kepler) {
     // Get around the error of possibly passing nothing.
     let f = obj.pop();
@@ -23,7 +22,6 @@ export const addToKepler = async (kepler: Kepler, orbit: string, ...obj: Array<a
 };
 
 export const saveToKepler = async (kepler: Kepler, pkh: string, ...obj: Array<any>) => {
-  obj.forEach((o) => console.log(o));
   if (kepler) {
     // Get around the error of possibly passing nothing.
     let f = obj.pop();
@@ -40,8 +38,6 @@ export const saveToKepler = async (kepler: Kepler, pkh: string, ...obj: Array<an
 
       return addresses.split('\n');
     } catch (e) {
-      console.warn(`Failed in create new orbit with error: ${e?.message || JSON.stringify(e)}`)
-      console.warn("Trying existing orbit")
       try {
         let id = await getOrbitId(pkh, {domain: process.env.KEPLER_URL, index: 0});
         return await addToKepler(kepler, id, ...[f, ...obj]);

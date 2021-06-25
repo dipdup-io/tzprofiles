@@ -106,8 +106,9 @@ module.exports = {
 			'BUILD_MODE_DEV': !prod,
 		}),
 		new webpack.EnvironmentPlugin({
+			IG_APP_ID: "210009324358917",
+			KEPLER_URL: "https://kepler.tzprofiles.com",
 			WITNESS_URL: "https://tzprofiles_witness.rebase-verifier.workers.dev",
-			KEPLER_URL: "https://kepler.tzprofiles.com"
 		})
 	],
 	devtool: prod ? false : 'source-map',

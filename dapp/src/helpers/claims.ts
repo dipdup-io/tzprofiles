@@ -1,7 +1,8 @@
 import SvelteComponentDev from '*.svelte';
-import {PersonOutlined, TwitterIcon, EthereumIcon} from 'components';
+import { BeaconWallet } from '@taquito/beacon-wallet';
+import {PersonOutlined, TwitterIcon, EthereumIcon, InstagramIcon} from 'components';
+import { signClaim } from 'src/utils';
 import * as tzp from 'tzprofiles';
-
 
 // TODO: Move to store?
 export const exhaustiveCheck = (arg: never) => {
@@ -9,13 +10,25 @@ export const exhaustiveCheck = (arg: never) => {
   // See https://dev.to/babak/exhaustive-type-checking-with-typescript-4l3f
 }
 
-// The types of claims supported by the UI.
-export type ClaimType = "basic" | "twitter" | "ethereum"
 // NOTE: Ethereum backwards compatibility
 export type ClaimVCType = "BasicProfile" 
   | 'TwitterVerification' 
   | 'EthereumControl' 
   | 'EthereumAddressControl'
+  | 'InstagramVerification'
+
+export type ClaimType = 'basic' 
+  | 'ethereum' 
+  | 'instagram'
+  | 'twitter';
+
+// All of the claim types to allow searching for exisitence in a collection.
+const claimTypes: Array<ClaimType> = [
+  'basic', 
+  'ethereum',
+  'instagram',
+  'twitter'  
+];
 
 // TODO: Type better? Define what VCs look like generically?
 export const claimTypeFromVC = (vc: any): ClaimType | false => {
@@ -27,23 +40,22 @@ export const claimTypeFromVC = (vc: any): ClaimType | false => {
     let type = vc.type[i] as ClaimVCType;
 
     switch (type) {
+      case 'BasicProfile':
+        return 'basic'
       // NOTE: Ethereum backwards compatibility
       case 'EthereumControl':
       case 'EthereumAddressControl':
         return 'ethereum';
+      case 'InstagramVerification':
+        return 'instagram';
       case 'TwitterVerification':
-        return 'twitter'
-      case 'BasicProfile':
-        return 'basic'
+        return 'twitter';
       default:
     }
   }
 
-  return false
+  return false;
 }
-
-// All of the claim types to allow searching for exisitence in a collection.
-const claimTypes: Array<ClaimType> = ['basic', 'twitter', 'ethereum']
 
 export interface BasicDraft {
   alias: string,
@@ -52,9 +64,9 @@ export interface BasicDraft {
   website: string
 }
 
-export interface TwitterDraft {
+export interface InstagramDraft {
+  postUrl: string,
   handle: string
-  tweetUrl: string
 }
 
 export interface EthereumDraft {
@@ -62,7 +74,15 @@ export interface EthereumDraft {
   address: string,
 }
 
-export type ClaimDraft = BasicDraft | TwitterDraft | EthereumDraft;
+export interface TwitterDraft {
+  handle: string
+  tweetUrl: string
+}
+
+export type ClaimDraft = BasicDraft 
+  | EthereumDraft
+  | InstagramDraft
+  | TwitterDraft 
 
 /*
 * UI Text & Assets
@@ -98,6 +118,7 @@ export const newDisplay = (ct: ClaimType): ClaimUIAssets => {
         title: 'Basic Profile',
         type: 'Basic Profile'
       }
+
     case 'ethereum': 
       return {
         description: 'This process is used to link your Ethereum address to your Tezos account by connecting to MetaMask, signing using your Ethereum address, and finally receiving the verification.',
@@ -105,11 +126,23 @@ export const newDisplay = (ct: ClaimType): ClaimUIAssets => {
         icon: EthereumIcon,
         route: '/ethereum',
         routeDescription: 'Ethereum Address Ownership',
-        // TODO: Is this a good description of the proof?
         proof: 'Address Signature',
         title: 'Ethereum Address Ownership',
         type: 'Address Ownership',
       }
+
+    case 'instagram':
+      return  {
+        description: 'This process is used to link your Instagram account to your Tezos account by posting a caption with a signature from your private key, entering your Instagram handle, and finally entering the link to the post.',
+        display: 'Instagram Account Verification',
+        icon: InstagramIcon,
+        route: '/instagram',
+        routeDescription: 'Instagram Account Information',
+        proof: 'Post Caption',
+        title: 'Instagram Verification',
+        type: 'Social Media',
+      }
+
     case 'twitter':
       return  {
         description: 'This process is used to link your Twitter account to your Tezos account by signing a message using your private key, entering your Twitter handle, and finally, tweeting that message.',
@@ -134,12 +167,17 @@ export const newDraft = (ct: ClaimType): ClaimDraft => {
         alias: '',
         description: '',
         logo: '',
-        website: '',
+        website: ''
       };
     case 'ethereum':
       return {
         address: '',
         sameAs: '',
+      };
+    case 'instagram':
+      return {
+        postUrl: '',
+        handle: ''
       };
     case 'twitter':
       return {
@@ -164,9 +202,6 @@ export interface Claim {
   // The user supplied changes to the concept.
   // If content->draft !deepEquals draft, show create/update UI.
   draft: ClaimDraft,
-
-  // TODO: Make real and use to generate forms.
-  // draftSchema: JSONSchema
 
   // The kepler reference to the existing claim, false when not saved to kepler.
   irl: string | false;
@@ -233,6 +268,14 @@ export const contentToDraft = (ct: ClaimType, content: any): ClaimDraft => {
         sameAs
       }
     }
+    case 'instagram': {
+      const {evidence} = content;
+      const {handle, postUrl} = evidence;
+      return {
+        postUrl,
+        handle,
+      }
+    }
     case "twitter": {
       const {evidence, credentialSubject} = content;
       const {sameAs} = credentialSubject;
@@ -244,6 +287,39 @@ export const contentToDraft = (ct: ClaimType, content: any): ClaimDraft => {
         handle,
         tweetUrl
       }
+    }
+  }
+
+  exhaustiveCheck(ct);
+}
+
+export const claimToOutlink = (ct: ClaimType, c: Claim): string => {
+  if (!c.content) {
+    throw new Error('Cannot make outlink without content');
+  }
+
+  if (c.type !== ct) {
+    throw new Error('ClaimType must match claim');
+  }
+
+  let draft = contentToDraft(c.type, c.content);
+
+  switch (ct) {
+    case 'basic': {
+      draft = draft as BasicDraft;
+      return draft.website;
+    }
+    case 'ethereum': {
+      draft = draft as EthereumDraft;
+      return `https://etherscan.io/address/${draft.address}`;
+    }
+    case 'instagram': {
+      draft = draft as InstagramDraft;
+      return `https://www.instagram.com/${draft.handle}`;
+    }
+    case 'twitter': {
+      draft = draft as TwitterDraft;
+      return `https://www.twitter.com/${draft.handle}`;
     }
   }
 
@@ -274,6 +350,90 @@ export const isUnsavedDraft = (c: Claim): boolean => {
   return deepEqual(c.draft, contentToDraft(c.type, c.content));
 }
 
+/*
+* Social Media Functions
+*/
+
+export type socialMediaClaimType = "instagram"
+| "twitter";
+
+const socialMediaTitle = (smType: socialMediaClaimType): string => {
+  switch (smType) {
+    case 'instagram': 
+      return 'Instagram';
+    case 'twitter': 
+      return 'Twitter';
+  }
+
+  exhaustiveCheck(smType);
+}
+
+const socialMediaHandle = (smType: socialMediaClaimType, handle: string): string => {
+  switch (smType) {
+    case 'instagram': 
+    case 'twitter': 
+      return `@${handle}`;
+  }
+
+  exhaustiveCheck(smType);
+}
+
+const tzpHandle = (smType: socialMediaClaimType): string => {
+  switch (smType) {
+    case 'instagram': 
+      return socialMediaHandle(smType, 'tezos_profiles');
+    case 'twitter': 
+      return socialMediaHandle(smType, 'tzprofiles');
+  }
+
+  exhaustiveCheck(smType);
+}
+
+export const getUnsignedMessage = (
+  smType: socialMediaClaimType, 
+  // TODO: Type better
+  userData: any,
+  handle: string
+): string => {
+  let addr = userData?.account?.address;
+  if (!addr) {
+    throw new Error("Could not find Tezos address in user data");
+  }
+  
+  return `I am attesting that this ${socialMediaTitle(smType)} handle ${socialMediaHandle(smType, handle)} is linked to the Tezos account ${addr} for ${tzpHandle(smType)}`
+}
+
+export const getPreparedUnsignedMessage = (
+  smType: socialMediaClaimType, 
+  // TODO: Type better
+  userData: any,
+  handle: string
+): string => {
+  return `Tezos Signed Message: ${getUnsignedMessage(smType, userData, handle)}`;
+}
+
+export const getSignedClaim = async (
+  smType: socialMediaClaimType, 
+  // TODO: Type better
+  userData: any,
+  handle: string,
+  wallet: BeaconWallet
+): Promise<string> => {
+  const msg = `${getPreparedUnsignedMessage(smType, userData, handle)}\n\n`;
+  const sig = await signClaim(userData, msg, wallet);
+  return `sig:${sig}`
+}
+
+export const getFullSocialMediaClaim = async (
+  smType: socialMediaClaimType, 
+  // TODO: Type better
+  userData: any,
+  handle: string,
+  wallet: BeaconWallet
+): Promise<string> => {
+  return `${getUnsignedMessage(smType, userData, handle)}\n\n${await getSignedClaim(smType, userData, handle, wallet)}`
+}
+
 /* 
 * Things that should be built in
 */
@@ -296,7 +456,8 @@ const deepEqual = (object1: object, object2: object): boolean => {
     const val2 = object2[key];
     const areObjects = isObject(val1) && isObject(val2);
     if (
-      areObjects && !deepEqual(val1, val2) ||      !areObjects && val1 !== val2
+      areObjects && !deepEqual(val1, val2) 
+      || !areObjects && val1 !== val2
     ) {
       return false;
     }
