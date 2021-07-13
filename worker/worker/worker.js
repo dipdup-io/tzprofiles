@@ -247,11 +247,20 @@ async function handler_instagram_login(request) {
   }
 }
 
+async function handler_data_deletion(request) {
+  return new Response(JSON.stringify({
+    code: `${+ new Date.now()}`,
+    url: `https://tzprofiles.com/instagram-data-deletion`
+  }))
+}
+
 async function handleRequest(request) {
   const r = new Router();
   r.get('/witness_tweet', request => handler_witness_tweet(request));
   r.get('/witness_instagram_post', request => handler_witness_instagram_post(request));
   r.get('/instagram_login', request => handler_instagram_login(request));
+  r.get('/instagram_data_deletion', request => handler_data_deletion(request))
+  r.get('/instagram-deauth', request => handler_data_deletion(request))
   const resp = await r.route(request);
   return resp;
 }

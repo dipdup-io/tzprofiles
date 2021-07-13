@@ -70,13 +70,13 @@
 </style>
 
 <script lang="ts">
-
   import { Router, Route } from 'svelte-navigator';
   import {
     Address,
     Connect,
     Ethereum,
     Instagram,
+    InstagramDataDeletion,
     Faq,
     Twitter,
     BasicProfile,
@@ -166,6 +166,11 @@
   </Route>
   <Route path="/view/:address">
     <View />
+  </Route>
+
+  <!-- FB / IG App compliance:-->
+  <Route path="instagram-data-deletion">
+    <InstagramDataDeletion />
   </Route>
 
   <!-- Context Files:-->
