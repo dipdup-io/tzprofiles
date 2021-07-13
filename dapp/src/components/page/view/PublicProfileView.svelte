@@ -39,7 +39,7 @@
       <img
         src={basicDisplay.logo || ''}
         class="img-self"
-        alt="profile-image"
+        alt="profile-logo"
         on:error={() => {
           shouldDisplayOriginalImage = false;
         }}
