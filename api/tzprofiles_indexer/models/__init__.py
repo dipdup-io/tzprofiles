@@ -37,9 +37,9 @@ class TZProfile(Model):
         self.website = None  # type: ignore[assignment]
         self.twitter = None  # type: ignore[assignment]
         self.domain_name = None  # type: ignore[assignment]
-        self.discord = None
-        self.github = None
-        self.ethereum = None
+        self.discord = None  # type: ignore[assignment]
+        self.github = None  # type: ignore[assignment]
+        self.ethereum = None  # type: ignore[assignment]
 
     @property
     def metadata(self) -> Dict[str, Any]:
