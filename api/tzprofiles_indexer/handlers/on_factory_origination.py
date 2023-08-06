@@ -1,9 +1,11 @@
 from typing import cast
+
 from dipdup.context import HandlerContext
 from dipdup.models.tezos_tzkt import TzktOrigination
+
 from tzprofiles_indexer import models
-from tzprofiles_indexer.types.tzprofile.tezos_storage import TzprofileStorage
 from tzprofiles_indexer.handlers import save_claims
+from tzprofiles_indexer.types.tzprofile.tezos_storage import TzprofileStorage
 
 
 async def on_factory_origination(

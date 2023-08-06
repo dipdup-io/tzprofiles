@@ -1,6 +1,6 @@
 # tzprofiles_indexer
 
-Tezos Profiles (TZP) is a web application that helps users regain control 
+Tezos Profiles (TZP) is a web application that helps users regain control
 
 ## Installation
 
@@ -12,7 +12,7 @@ You need a Linux/macOS system with Python 3.11 installed. Use our installer for 
 curl -Lsf https://dipdup.io/install.py | python3
 ```
 
-See the [Installation](https://docs.dipdup.io/installation) page for all options.
+See the [Installation](https://dipdup.io/docs/installation) page for all options.
 
 ## Usage
 
@@ -31,7 +31,7 @@ dipdup -c . -c configs/dipdup.sqlite.yml run
 Or spawn a docker-compose stack:
 
 ```bash
-cp deploy/.env.example deploy/.env
+cp deploy/.env.default deploy/.env
 # Edit .env before running
 docker-compose -f deploy/compose.yaml up
 ```

@@ -5,7 +5,7 @@ replay:
   template: demo_blank
   package: tzprofiles_indexer
   version: 0.0.1
-  description: Tezos Profiles (TZP) is a web application that helps users regain control 
+  description: Tezos Profiles (TZP) is a web application that helps users regain control
   license: Apache 2.0
   name: 
   email: 

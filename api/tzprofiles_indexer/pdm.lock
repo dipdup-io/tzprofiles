@@ -6,7 +6,7 @@ groups = ["default", "dev"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:6795023f9ab568e83eebc289401e89c62380be6a2711e1bce1d2c80dc77214f4"
+content_hash = "sha256:9701a0c2037ef95006b761421118dc58d15156f3da67204b60787d973759061d"
 
 [[package]]
 name = "aiohttp"
@@ -343,7 +343,7 @@ files = [
 
 [[package]]
 name = "datamodel-code-generator"
-version = "0.21.2"
+version = "0.21.3"
 requires_python = ">=3.7,<4.0"
 summary = "Datamodel Code Generator"
 dependencies = [
@@ -361,8 +361,8 @@ dependencies = [
     "toml<1.0.0,>=0.10.0",
 ]
 files = [
-    {file = "datamodel_code_generator-0.21.2-py3-none-any.whl", hash = "sha256:99f07ddeb4b58dbbcd7822ee83f44e408b9a9550975ea64a483df1e101abf4c2"},
-    {file = "datamodel_code_generator-0.21.2.tar.gz", hash = "sha256:824a11c4a0b2e5b23e102a55db0e4e9120d58cdf77e0cc35abd6efbcf7a46326"},
+    {file = "datamodel_code_generator-0.21.3-py3-none-any.whl", hash = "sha256:42b4fbf167a2352d5b7e5ee83dd57f0999683a0ebcac3b97f26c3ac135198957"},
+    {file = "datamodel_code_generator-0.21.3.tar.gz", hash = "sha256:a8f05509b7632d18f3f4bfa8a313769cbe0754dac3715d25d26c71d2c0d2e0d4"},
 ]
 
 [[package]]
@@ -387,9 +387,8 @@ files = [
 
 [[package]]
 name = "dipdup"
-version = "7.0.0rc2"
-requires_python = ">=3.11,<3.12"
-path = "../../../dipdup"
+version = "7.0.0rc3"
+requires_python = "<3.12,>=3.11"
 summary = "Modular framework for creating selective indexers and featureful backends for dapps"
 dependencies = [
     "APScheduler~=3.8",
@@ -416,6 +415,10 @@ dependencies = [
     "tabulate~=0.9",
     "tortoise-orm==0.19.3",
     "web3~=6.2",
+]
+files = [
+    {file = "dipdup-7.0.0rc3-py3-none-any.whl", hash = "sha256:a7524e371b95a236327e5d92cd14b374d57a9b10e310496573523eb01543d932"},
+    {file = "dipdup-7.0.0rc3.tar.gz", hash = "sha256:521c5ab5e4355c24bd6e974cc9c4eb7e9a06e04b870482ceb5a7eb2e45541379"},
 ]
 
 [[package]]
