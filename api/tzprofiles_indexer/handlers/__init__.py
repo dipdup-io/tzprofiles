@@ -4,8 +4,6 @@ import logging
 import os
 from enum import Enum
 from typing import Any
-from typing import Dict
-from typing import List
 from urllib.parse import urljoin
 
 import aiohttp
@@ -17,7 +15,12 @@ from tenacity import stop_after_attempt
 from tenacity import wait_exponential
 
 from tzprofiles_indexer.models import TZProfile
-from tzprofiles_indexer.types.tzprofile.tezos_storage import Claim
+from tzprofiles_indexer.types.tzprofile import tezos_storage as storage
+from tzprofiles_indexer.types.tzprofile_old import tezos_storage as old_storage
+
+Claim = storage.Claim | old_storage.Claim
+ClaimList = list[storage.Claim] | list[old_storage.Claim]
+
 
 KEPLER_ENDPOINT = os.getenv("KEPLER_ENDPOINT", "https://kepler.tzprofiles.com/")
 
@@ -99,7 +102,7 @@ async def retrieve_claim(kepler_link: str) -> str:
     wait=wait_exponential(multiplier=5, min=1),
     after=after_log(LOGGER, logging.WARNING),  # type: ignore[arg-type]
 )
-async def resolve_claim(kepler_link: str, checksum: str) -> Dict[str, Any]:
+async def resolve_claim(kepler_link: str, checksum: str) -> dict[str, Any]:
     claim = await retrieve_claim(kepler_link)
 
     h = hashlib.sha256()
@@ -117,7 +120,7 @@ async def resolve_claim(kepler_link: str, checksum: str) -> Dict[str, Any]:
     return claim_json
 
 
-def validate_vc(vc: Dict[str, Any], address: str) -> None:
+def validate_vc(vc: dict[str, Any], address: str) -> None:
     if Credential.BASIC_PROFILE.value in vc["type"]:
         if vc["credentialSubject"]["id"] != "did:pkh:tz:" + address:
             raise Spoof(vc, "Credential subject is not the profile's owner")
@@ -147,7 +150,7 @@ def validate_vc(vc: Dict[str, Any], address: str) -> None:
         raise UnknownCredential(vc)
 
 
-def parse_claim(vc: Dict[str, Any], profile: TZProfile) -> None:
+def parse_claim(vc: dict[str, Any], profile: TZProfile) -> None:
     try:
         if Credential.BASIC_PROFILE.value in vc["type"]:
             profile.alias = vc["credentialSubject"].get("alias", None)
@@ -170,7 +173,7 @@ def parse_claim(vc: Dict[str, Any], profile: TZProfile) -> None:
         logging.exception(e)
 
 
-async def save_claims(profile: TZProfile, claims: List[Claim]) -> None:
+async def save_claims(profile: TZProfile, claims: ClaimList) -> None:
     profile.reset()
     profile.unprocessed_claims = [(claim.string_0, claim.string_1, claim.bytes) for claim in claims]  # type: ignore
     await profile.save()

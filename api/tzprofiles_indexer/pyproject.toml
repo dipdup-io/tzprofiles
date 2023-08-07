@@ -20,6 +20,7 @@ dev = [
     "black",
     "ruff",
     "mypy",
+    "-e file:///${PROJECT_ROOT}/../../../dipdup#egg=dipdup",
 ]
 
 [tool.pdm.scripts]

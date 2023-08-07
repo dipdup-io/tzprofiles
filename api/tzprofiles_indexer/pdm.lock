@@ -6,7 +6,7 @@ groups = ["default", "dev"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:9701a0c2037ef95006b761421118dc58d15156f3da67204b60787d973759061d"
+content_hash = "sha256:3ba300563850b6db8fcf0cbe0340331a9a454e740910d8757bc3e4c80f42516f"
 
 [[package]]
 name = "aiohttp"
@@ -388,7 +388,9 @@ files = [
 [[package]]
 name = "dipdup"
 version = "7.0.0rc3"
-requires_python = "<3.12,>=3.11"
+requires_python = ">=3.11,<3.12"
+editable = true
+path = "../../../dipdup"
 summary = "Modular framework for creating selective indexers and featureful backends for dapps"
 dependencies = [
     "APScheduler~=3.8",
@@ -415,10 +417,6 @@ dependencies = [
     "tabulate~=0.9",
     "tortoise-orm==0.19.3",
     "web3~=6.2",
-]
-files = [
-    {file = "dipdup-7.0.0rc3-py3-none-any.whl", hash = "sha256:a7524e371b95a236327e5d92cd14b374d57a9b10e310496573523eb01543d932"},
-    {file = "dipdup-7.0.0rc3.tar.gz", hash = "sha256:521c5ab5e4355c24bd6e974cc9c4eb7e9a06e04b870482ceb5a7eb2e45541379"},
 ]
 
 [[package]]
