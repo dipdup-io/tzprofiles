@@ -57,5 +57,5 @@ jobs:
 
 advanced:
   early_realtime: False
-  postpone_jobs: True
+  postpone_jobs: False
   merge_subscriptions: True
