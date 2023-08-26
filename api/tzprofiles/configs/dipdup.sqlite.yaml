@@ -1,6 +1,6 @@
 database:
   kind: sqlite
-  path: ${SQLITE_PATH:-/tmp/tzprofiles_indexer.sqlite}
+  path: ${SQLITE_PATH:-/tmp/tzprofiles.sqlite}
 
 sentry:
   dsn: ${SENTRY_DSN:-""}

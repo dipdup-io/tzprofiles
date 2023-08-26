@@ -1,8 +1,8 @@
 import json
 from unittest import IsolatedAsyncioTestCase
 
-from tzprofiles_indexer.handlers import resolve_profile
-from tzprofiles_indexer.models import TZProfile
+from tzprofiles.handlers import resolve_profile
+from tzprofiles.models import TZProfile
 
 
 class ResolveProfileTest(IsolatedAsyncioTestCase):

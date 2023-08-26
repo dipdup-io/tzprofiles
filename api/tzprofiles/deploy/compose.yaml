@@ -1,4 +1,4 @@
-name: tzprofiles_indexer
+name: tzprofiles
 
 services:
   dipdup:

@@ -1,4 +1,4 @@
-# tzprofiles_indexer
+# tzprofiles
 
 Tezos Profiles (TZP) is a web application that helps users regain control
 

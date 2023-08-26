@@ -4,10 +4,10 @@ from typing import cast
 from dipdup.context import HandlerContext
 from dipdup.models.tezos_tzkt import TzktTransaction
 
-import tzprofiles_indexer.models as models
-from tzprofiles_indexer.handlers import save_claims
-from tzprofiles_indexer.types.tzprofile.tezos_parameters.default import DefaultParameter
-from tzprofiles_indexer.types.tzprofile.tezos_storage import TzprofileStorage
+import tzprofiles.models as models
+from tzprofiles.handlers import save_claims
+from tzprofiles.types.tzprofile.tezos_parameters.default import DefaultParameter
+from tzprofiles.types.tzprofile.tezos_storage import TzprofileStorage
 
 
 async def on_update(

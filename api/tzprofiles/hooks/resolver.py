@@ -5,9 +5,9 @@ import time
 
 from dipdup.context import HookContext
 
-from tzprofiles_indexer.handlers import resolve_profile
-from tzprofiles_indexer.handlers import set_logger
-from tzprofiles_indexer.models import TZProfile
+from tzprofiles.handlers import resolve_profile
+from tzprofiles.handlers import set_logger
+from tzprofiles.models import TZProfile
 
 SLEEP = 5
 _ENV_BATCH = os.getenv('BATCH')

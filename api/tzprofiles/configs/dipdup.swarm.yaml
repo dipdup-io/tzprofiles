@@ -1,13 +1,13 @@
 database:
   kind: postgres
-  host: tzprofiles_indexer_db
+  host: tzprofiles_db
   port: 5432
   user: ${POSTGRES_USER:-dipdup}
   password: ${POSTGRES_PASSWORD}
   database: ${POSTGRES_DB:-dipdup}
 
 hasura:
-  url: http://tzprofiles_indexer_hasura:8080
+  url: http://tzprofiles_hasura:8080
   admin_secret: ${HASURA_SECRET}
   allow_aggregations: false
   camel_case: true
