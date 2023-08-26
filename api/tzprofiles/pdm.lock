@@ -6,7 +6,7 @@ groups = ["default", "dev"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:3465bf32abfb52042ac19b1dfe3e7f28c0de4e6ae1b987eff5f1e19aa24ce8da"
+content_hash = "sha256:d15d894124ad972b9df4f43acbc238aa925eb1d505ab7c5dac6de605b633e44a"
 
 [[package]]
 name = "aiohttp"
@@ -1393,12 +1393,12 @@ files = [
 
 [[package]]
 name = "tenacity"
-version = "8.2.3"
-requires_python = ">=3.7"
+version = "8.0.1"
+requires_python = ">=3.6"
 summary = "Retry code until it succeeds"
 files = [
-    {file = "tenacity-8.2.3-py3-none-any.whl", hash = "sha256:ce510e327a630c9e1beaf17d42e6ffacc88185044ad85cf74c0a8887c6a0f88c"},
-    {file = "tenacity-8.2.3.tar.gz", hash = "sha256:5398ef0d78e63f40007c1fb4c0bff96e1911394d2fa8d194f77619c05ff6cc8a"},
+    {file = "tenacity-8.0.1-py3-none-any.whl", hash = "sha256:f78f4ea81b0fabc06728c11dc2a8c01277bfc5181b321a4770471902e3eb844a"},
+    {file = "tenacity-8.0.1.tar.gz", hash = "sha256:43242a20e3e73291a28bcbcacfd6e000b02d3857a9a9fff56b297a27afdc932f"},
 ]
 
 [[package]]
