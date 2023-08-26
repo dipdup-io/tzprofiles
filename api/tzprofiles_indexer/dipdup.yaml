@@ -1,0 +1,61 @@
+spec_version: 2.0
+package: tzprofiles_indexer
+
+contracts:
+  tzprofile:
+    kind: tezos
+    code_hash: KT1Ld7UWB21dwvgh9MGKnyq8Mhp5EuhoWMLe
+    typename: tzprofile
+  tzprofile_old:
+    kind: tezos
+    code_hash: KT1CJcswaF5oSRTxD3BAgZNkiUruGeiKBnee
+    typename: tzprofile_old
+
+datasources:
+  tzkt:
+    kind: tezos.tzkt
+    url: https://api.tzkt.io
+
+templates:
+  tzprofiles:
+    kind: tezos.tzkt.operations
+    datasource: tzkt
+    contracts:
+      - <contract>
+    types:
+      - origination
+      - transaction
+    handlers:
+      - callback: on_origination
+        pattern:
+          - type: origination
+            originated_contract: <contract>
+      - callback: on_update
+        pattern:
+          - type: transaction
+            destination: <contract>
+            entrypoint: default
+
+indexes:
+  tzprofile:
+    template: tzprofiles
+    values:
+      contract: tzprofile
+  tzprofile_old:
+    template: tzprofiles
+    values:
+      contract: tzprofile_old
+
+hooks:
+  resolver:
+    callback: resolver
+
+jobs:
+  resolver:
+    hook: resolver
+    daemon: True
+
+advanced:
+  early_realtime: False
+  postpone_jobs: False
+  merge_subscriptions: True
