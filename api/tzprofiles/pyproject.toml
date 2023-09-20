@@ -2,14 +2,14 @@
 name = "tzprofiles"
 version = "0.0.1"
 description = "DipDup indexer for Tezos Profiles"
-license = { text = "Apache-2.0" }
+license = { text = "Apache 2.0" }
 authors = [
-    { name = "Spruce Systems, Inc." }
+    { name = "Spruce Systems, Inc.", email = "" }
 ]
 readme = "README.md"
 requires-python = ">=3.11,<3.12"
 dependencies = [
-    "dipdup~=7.0.0rc4",
+    "dipdup>=7.0.0rc4,<8",
     "tenacity==8.0.1",
     "didkit>=0.3.2",
 ]
