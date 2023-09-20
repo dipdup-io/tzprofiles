@@ -5,11 +5,12 @@ import time
 
 import asyncpg  # type: ignore[import]
 from dipdup.context import HookContext
-from dipdup.models import Meta
 
 from tzprofiles.handlers import resolve_profile
 from tzprofiles.handlers import set_logger
 from tzprofiles.models import TZProfile
+
+_too_big_profiles: set[str] = set()
 
 SLEEP = 5
 _ENV_BATCH = os.getenv('BATCH')
@@ -17,6 +18,9 @@ BATCH = int(_ENV_BATCH) if _ENV_BATCH is not None else 100
 
 
 async def _resolve(ctx: HookContext, profile: TZProfile):
+    if profile.pk in _too_big_profiles:
+        return
+
     ctx.logger.info(f'Resolving profile {profile.contract}')
 
     success = False
@@ -32,16 +36,8 @@ async def _resolve(ctx: HookContext, profile: TZProfile):
             try:
                 await profile.save()
             except asyncpg.ProgramLimitExceededError as e:
-                # FIXME: Find a better solution
-                await Meta.create(
-                    key=f'profile_{profile.pk}',
-                    value={
-                        'reason': str(e),
-                    },
-                )
-                profile.reset()
-                profile.failed = True
-                await profile.save()
+                ctx.logger.error('%s: %s', profile.pk, str(e))
+                _too_big_profiles.add(profile.pk)
                 return
 
             assert profile.account is not None
