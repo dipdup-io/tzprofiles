@@ -9,6 +9,7 @@ from dipdup.context import HookContext
 from tzprofiles.handlers import resolve_profile
 from tzprofiles.handlers import set_logger
 from tzprofiles.models import TZProfile
+from dipdup.database import get_connection
 
 _too_big_profiles: set[str] = set()
 
@@ -38,6 +39,9 @@ async def _resolve(ctx: HookContext, profile: TZProfile):
             except asyncpg.ProgramLimitExceededError as e:
                 ctx.logger.error('%s: %s', profile.pk, str(e))
                 _too_big_profiles.add(profile.pk)
+
+                conn = get_connection()
+                await conn.close()
                 return
 
             assert profile.account is not None
