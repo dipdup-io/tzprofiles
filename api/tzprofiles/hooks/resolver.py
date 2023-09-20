@@ -31,11 +31,11 @@ async def _resolve(ctx: HookContext, profile: TZProfile):
 
             try:
                 await profile.save()
-            except asyncpg.ProgramLimitExceededError as e:
+            except asyncpg.ProgramLimitExceededError:
                 # FIXME: Find a better solution
                 await Meta.create(
                     key=f'profile_{profile.pk}',
-                    value=str(e),
+                    value='too_big',
                 )
                 profile.reset()
                 profile.failed = True
