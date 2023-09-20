@@ -3,7 +3,9 @@ import logging
 import os
 import time
 
+import asyncpg  # type: ignore[import]
 from dipdup.context import HookContext
+from dipdup.models import Meta
 
 from tzprofiles.handlers import resolve_profile
 from tzprofiles.handlers import set_logger
@@ -27,7 +29,19 @@ async def _resolve(ctx: HookContext, profile: TZProfile):
             await resolve_profile(profile)
             resolved_at = time.perf_counter()
 
-            await profile.save()
+            try:
+                await profile.save()
+            except asyncpg.ProgramLimitExceededError as e:
+                # FIXME: Find a better solution
+                await Meta.create(
+                    key=f'profile_{profile.pk}',
+                    value=str(e),
+                )
+                profile.reset()
+                profile.failed = True
+                await profile.save()
+                return
+
             assert profile.account is not None
             await ctx.update_contract_metadata(
                 network='mainnet',
