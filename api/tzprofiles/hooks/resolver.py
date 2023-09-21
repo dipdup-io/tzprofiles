@@ -3,25 +3,20 @@ import logging
 import os
 import time
 
-import asyncpg  # type: ignore[import]
 from dipdup.context import HookContext
 
 from tzprofiles.handlers import resolve_profile
 from tzprofiles.handlers import set_logger
 from tzprofiles.models import TZProfile
-from dipdup.database import get_connection
-
-_too_big_profiles: set[str] = set()
 
 SLEEP = 5
 _ENV_BATCH = os.getenv('BATCH')
 BATCH = int(_ENV_BATCH) if _ENV_BATCH is not None else 100
-
+IGNORED_PROFILES = (
+    'KT1G6jaUQkRcxJcnrNLjCTn7xgD686PM2mEd',
+)
 
 async def _resolve(ctx: HookContext, profile: TZProfile):
-    if profile.pk in _too_big_profiles:
-        return
-
     ctx.logger.info(f'Resolving profile {profile.contract}')
 
     success = False
@@ -30,19 +25,16 @@ async def _resolve(ctx: HookContext, profile: TZProfile):
             success = True
             profile = await TZProfile.get(account=profile.account)
 
+            if profile.pk in IGNORED_PROFILES:
+                profile.failed = True
+                await profile.save()
+                return
+
             started_at = time.perf_counter()
             await resolve_profile(profile)
             resolved_at = time.perf_counter()
 
-            try:
-                await profile.save()
-            except asyncpg.ProgramLimitExceededError as e:
-                ctx.logger.error('%s: %s', profile.pk, str(e))
-                _too_big_profiles.add(profile.pk)
-
-                conn = get_connection()
-                await conn.close()
-                return
+            await profile.save()
 
             assert profile.account is not None
             await ctx.update_contract_metadata(
