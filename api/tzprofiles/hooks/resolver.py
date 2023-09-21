@@ -25,7 +25,7 @@ async def _resolve(ctx: HookContext, profile: TZProfile):
             success = True
             profile = await TZProfile.get(account=profile.account)
 
-            if profile.pk in IGNORED_PROFILES:
+            if profile.contract in IGNORED_PROFILES:
                 profile.failed = True
                 await profile.save()
                 return
