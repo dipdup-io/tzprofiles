@@ -19,16 +19,17 @@ IGNORED_PROFILES = (
 async def _resolve(ctx: HookContext, profile: TZProfile):
     ctx.logger.info(f'Resolving profile {profile.contract}')
 
+    if profile.contract in IGNORED_PROFILES:
+        profile.failed = True
+        profile.resolved = True
+        await profile.save()
+        return
+
     success = False
     while not success:
         async with ctx.transactions.in_transaction():
             success = True
             profile = await TZProfile.get(account=profile.account)
-
-            if profile.contract in IGNORED_PROFILES:
-                profile.failed = True
-                await profile.save()
-                return
 
             started_at = time.perf_counter()
             await resolve_profile(profile)
