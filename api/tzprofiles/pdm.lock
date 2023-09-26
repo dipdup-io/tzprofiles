@@ -6,7 +6,7 @@ groups = ["default", "dev"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:35d50cdfa75fdff4503cfd448cc12ee47592a4b2501005a2fc0e041628283bf7"
+content_hash = "sha256:4c2974fbd83bc660a5792adf0bce2abe20d617a6741f472c8d78b48c1afafde2"
 
 [[package]]
 name = "aiohttp"
@@ -387,7 +387,7 @@ files = [
 
 [[package]]
 name = "dipdup"
-version = "7.0.0rc5"
+version = "7.0.0"
 requires_python = "<3.12,>=3.11"
 summary = "Modular framework for creating selective indexers and featureful backends for dapps"
 dependencies = [
@@ -419,8 +419,8 @@ dependencies = [
     "web3~=6.2",
 ]
 files = [
-    {file = "dipdup-7.0.0rc5-py3-none-any.whl", hash = "sha256:db07cdd8f8c0dafdc6df64e7fa9a5ed588737781787e67666b72bedb32bb09ba"},
-    {file = "dipdup-7.0.0rc5.tar.gz", hash = "sha256:272e6a67eadd897f01cfa8e04cb960098477ad08ff4532973a27eb7a40346924"},
+    {file = "dipdup-7.0.0-py3-none-any.whl", hash = "sha256:fff15430a1cc12a182876f5678f08ac3f596d16a994303e3ba341e7064164fd2"},
+    {file = "dipdup-7.0.0.tar.gz", hash = "sha256:3403218f61b8b2dd3b75d2725ffb56b62d3e8fcbeafe76a4080c01e2e5ffa17d"},
 ]
 
 [[package]]
