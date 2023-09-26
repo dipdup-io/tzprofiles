@@ -9,7 +9,9 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.11,<3.12"
 dependencies = [
-    "dipdup>=7,<8"
+    "dipdup>=7,<8",
+    "tenacity==8.0.1",
+    "didkit>=0.3.2",
 ]
 
 [tool.pdm.dev-dependencies]
