@@ -1,0 +1,5 @@
+database:
+  kind: sqlite
+  path: ${SQLITE_PATH:-/tmp/tzprofiles.sqlite}
+
+logging: ${LOGLEVEL:-INFO}

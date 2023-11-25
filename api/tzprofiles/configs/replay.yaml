@@ -3,12 +3,13 @@ spec_version: 2.0
 replay:
   dipdup_version: 7
   template: demo_blank
-  package: tzprofiles_indexer
+  package: tzprofiles
   version: 0.0.1
-  description: Tezos Profiles (TZP) is a web application that helps users regain control
+  description: DipDup indexer for Tezos Profiles
   license: Apache 2.0
-  name: 
+  name: Spruce Systems, Inc.
   email: 
-  postgresql_image: postgres:15
-  hasura_image: hasura/graphql-engine:v2.30.0
+  postgres_image: postgres:15
+  postgres_data_path: /var/lib/postgresql/data
+  hasura_image: hasura/graphql-engine:latest
   line_length: 120

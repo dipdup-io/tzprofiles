@@ -1,16 +1,16 @@
 [project]
-name = "tzprofiles_indexer"
+name = "tzprofiles"
 version = "0.0.1"
 description = "DipDup indexer for Tezos Profiles"
-license = { text = "Apache-2.0" }
+license = { text = "Apache 2.0" }
 authors = [
-    { name = "Spruce Systems, Inc." }
+    { name = "Spruce Systems, Inc.", email = "" }
 ]
 readme = "README.md"
 requires-python = ">=3.11,<3.12"
 dependencies = [
-    "dipdup~=7.0.0rc3",
-    "tenacity>=8.2.2",
+    "dipdup>=7,<8",
+    "tenacity==8.0.1",
     "didkit>=0.3.2",
 ]
 
@@ -26,11 +26,11 @@ dev = [
 _isort = "isort ."
 _black = "black ."
 _ruff = "ruff check --fix ."
-_mypy = "mypy --no-incremental --exclude tzprofiles_indexer ."
+_mypy = "mypy --no-incremental --exclude tzprofiles ."
 all = { composite = ["fmt", "lint"] }
 fmt = { composite = ["_isort", "_black"] }
 lint = { composite = ["_ruff", "_mypy"] }
-image = "docker buildx build . --load --progress plain -f deploy/Dockerfile -t tzprofiles_indexer:latest"
+image = "docker buildx build . --load --progress plain -f deploy/Dockerfile -t tzprofiles:latest"
 
 [tool.isort]
 line_length = 120

@@ -1,5 +1,5 @@
 spec_version: 2.0
-package: tzprofiles_indexer
+package: tzprofiles
 
 contracts:
   tzprofile:
@@ -57,5 +57,5 @@ jobs:
 
 advanced:
   early_realtime: False
-  postpone_jobs: False
+  postpone_jobs: True
   merge_subscriptions: True

@@ -14,9 +14,9 @@ from tenacity import retry_if_exception_type
 from tenacity import stop_after_attempt
 from tenacity import wait_exponential
 
-from tzprofiles_indexer.models import TZProfile
-from tzprofiles_indexer.types.tzprofile import tezos_storage as storage
-from tzprofiles_indexer.types.tzprofile_old import tezos_storage as old_storage
+from tzprofiles.models import TZProfile
+from tzprofiles.types.tzprofile import tezos_storage as storage
+from tzprofiles.types.tzprofile_old import tezos_storage as old_storage
 
 Claim = storage.Claim | old_storage.Claim
 ClaimList = list[storage.Claim] | list[old_storage.Claim]

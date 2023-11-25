@@ -1,4 +1,5 @@
-name: tzprofiles_indexer
+version: "3.8"
+name: tzprofiles
 
 services:
   dipdup:
@@ -12,7 +13,7 @@ services:
       - 46339
       - 9000
     volumes:
-      - sqlite:${SQLITE_PATH:-/tmp/tzprofiles_indexer.sqlite}
+      - sqlite:${SQLITE_PATH:-/tmp/tzprofiles.sqlite}
 
 volumes:
   sqlite:

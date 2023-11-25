@@ -1,10 +1,10 @@
 from dipdup.context import HandlerContext
 from dipdup.models.tezos_tzkt import TzktOrigination
 
-from tzprofiles_indexer import models
-from tzprofiles_indexer.handlers import save_claims
-from tzprofiles_indexer.types.tzprofile.tezos_storage import TzprofileStorage
-from tzprofiles_indexer.types.tzprofile_old.tezos_storage import TzprofileOldStorage
+from tzprofiles import models
+from tzprofiles.handlers import save_claims
+from tzprofiles.types.tzprofile.tezos_storage import TzprofileStorage
+from tzprofiles.types.tzprofile_old.tezos_storage import TzprofileOldStorage
 
 
 async def on_origination(

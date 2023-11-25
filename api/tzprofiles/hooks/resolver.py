@@ -5,17 +5,25 @@ import time
 
 from dipdup.context import HookContext
 
-from tzprofiles_indexer.handlers import resolve_profile
-from tzprofiles_indexer.handlers import set_logger
-from tzprofiles_indexer.models import TZProfile
+from tzprofiles.handlers import resolve_profile
+from tzprofiles.handlers import set_logger
+from tzprofiles.models import TZProfile
 
 SLEEP = 5
 _ENV_BATCH = os.getenv('BATCH')
 BATCH = int(_ENV_BATCH) if _ENV_BATCH is not None else 100
-
+IGNORED_PROFILES = (
+    'KT1G6jaUQkRcxJcnrNLjCTn7xgD686PM2mEd',
+)
 
 async def _resolve(ctx: HookContext, profile: TZProfile):
     ctx.logger.info(f'Resolving profile {profile.contract}')
+
+    if profile.contract in IGNORED_PROFILES:
+        profile.failed = True
+        profile.resolved = True
+        await profile.save()
+        return
 
     success = False
     while not success:
@@ -28,6 +36,7 @@ async def _resolve(ctx: HookContext, profile: TZProfile):
             resolved_at = time.perf_counter()
 
             await profile.save()
+
             assert profile.account is not None
             await ctx.update_contract_metadata(
                 network='mainnet',
