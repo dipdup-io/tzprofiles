@@ -17,7 +17,7 @@ IGNORED_PROFILES = (
 )
 
 async def _resolve(ctx: HookContext, profile: TZProfile):
-    ctx.logger.info(f'Resolving profile {profile.contract}')
+    ctx.logger.info('Resolving profile %s', profile.contract)
 
     if profile.contract in IGNORED_PROFILES:
         profile.failed = True

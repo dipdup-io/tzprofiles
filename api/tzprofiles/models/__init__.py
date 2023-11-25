@@ -1,5 +1,4 @@
 from typing import Any
-from typing import Dict
 
 from dipdup import fields
 from dipdup.models import Model
@@ -42,7 +41,7 @@ class TZProfile(Model):
         self.ethereum = None  # type: ignore[assignment]
 
     @property
-    def metadata(self) -> Dict[str, Any]:
+    def metadata(self) -> dict[str, Any]:
         return {
             'alias': self.alias,
             'description': self.description,

@@ -3,8 +3,6 @@
 
 from __future__ import annotations
 
-from typing import List
-
 from pydantic import BaseModel
 from pydantic import Extra
 
@@ -22,5 +20,5 @@ class DefaultParameter(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    set: List[SetItem]
+    set: list[SetItem]
     bool: bool

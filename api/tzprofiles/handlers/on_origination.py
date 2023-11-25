@@ -15,6 +15,6 @@ async def on_origination(
 
     profile, _ = await models.TZProfile.get_or_create(
         account=tzprofile_origination.storage.owner,
-        defaults={"contract": contract},
+        defaults={'contract': contract},
     )
     await save_claims(profile, tzprofile_origination.storage.claims)
