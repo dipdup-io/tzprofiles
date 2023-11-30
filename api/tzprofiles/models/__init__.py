@@ -43,16 +43,16 @@ class TZProfile(Model):
     @property
     def metadata(self) -> dict[str, Any]:
         return {
-            'alias': self.alias,
-            'description': self.description,
-            'logo': self.logo,
-            'website': self.website,
-            'twitter': self.twitter,
-            'domain_name': self.domain_name,
-            'discord': self.discord,
-            'github': self.github,
-            'ethereum': self.ethereum,
+            "alias": self.alias,
+            "description": self.description,
+            "logo": self.logo,
+            "website": self.website,
+            "twitter": self.twitter,
+            "domain_name": self.domain_name,
+            "discord": self.discord,
+            "github": self.github,
+            "ethereum": self.ethereum,
         }
 
     class Meta:
-        table = 'tzprofiles'
+        table = "tzprofiles"
