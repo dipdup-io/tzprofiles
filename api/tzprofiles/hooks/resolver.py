@@ -10,14 +10,14 @@ from tzprofiles.handlers import set_logger
 from tzprofiles.models import TZProfile
 
 SLEEP = 5
-_ENV_BATCH = os.getenv('BATCH')
+_ENV_BATCH = os.getenv("BATCH")
 BATCH = int(_ENV_BATCH) if _ENV_BATCH is not None else 100
 IGNORED_PROFILES = (
-    'KT1G6jaUQkRcxJcnrNLjCTn7xgD686PM2mEd',
+    "KT1G6jaUQkRcxJcnrNLjCTn7xgD686PM2mEd",
 )
 
 async def _resolve(ctx: HookContext, profile: TZProfile):
-    ctx.logger.info(f'Resolving profile {profile.contract}')
+    ctx.logger.info("Resolving profile %s", profile.contract)
 
     if profile.contract in IGNORED_PROFILES:
         profile.failed = True
@@ -39,12 +39,12 @@ async def _resolve(ctx: HookContext, profile: TZProfile):
 
             assert profile.account is not None
             await ctx.update_contract_metadata(
-                network='mainnet',
+                network="mainnet",
                 address=profile.account,
                 metadata=profile.metadata,
             )
             ctx.logger.debug(
-                'Resolved in %.2f, saved in %.2f seconds',
+                "Resolved in %.2f, saved in %.2f seconds",
                 resolved_at - started_at,
                 time.perf_counter() - resolved_at,
             )
@@ -57,24 +57,24 @@ async def resolver(
 ) -> None:
     ctx.logger.logger.level = logging.INFO  # config not being used here
     set_logger(ctx.logger)
-    ctx.logger.info('Starting resolver daemon')
+    ctx.logger.info("Starting resolver daemon")
     while True:
-        ctx.logger.info('Starting loop')
+        ctx.logger.info("Starting loop")
         profiles = await TZProfile.filter(resolved=False).limit(BATCH).all()
         # .only('account') doesn't with dipdup wrapper of versioned data
         if not profiles:
-            ctx.logger.info('No profiles to resolve, sleeping %s seconds', SLEEP)
+            ctx.logger.info("No profiles to resolve, sleeping %s seconds", SLEEP)
             await asyncio.sleep(SLEEP)
             continue
 
         start = time.time()
 
-        ctx.logger.info('Starting batch')
+        ctx.logger.info("Starting batch")
         await asyncio.gather(*[_resolve(ctx, profile) for profile in profiles])
-        ctx.logger.info('Finished batch')
+        ctx.logger.info("Finished batch")
 
         end = time.time()
         remain = start + 1 - end
         if remain > 0:
             await asyncio.sleep(remain)
-        ctx.logger.info('Finishing loop')
+        ctx.logger.info("Finishing loop")

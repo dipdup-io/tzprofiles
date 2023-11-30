@@ -3,9 +3,6 @@
 
 from __future__ import annotations
 
-from typing import Dict
-from typing import List
-
 from pydantic import BaseModel
 from pydantic import Extra
 
@@ -23,7 +20,7 @@ class TzprofileStorage(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    claims: List[Claim]
+    claims: list[Claim]
     contract_type: str
-    metadata: Dict[str, str]
+    metadata: dict[str, str]
     owner: str

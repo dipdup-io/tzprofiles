@@ -85,7 +85,7 @@ class DeletedCredential(ValueError):
     after=after_log(LOGGER, logging.WARNING),  # type: ignore[arg-type]
 )
 async def retrieve_claim(kepler_link: str) -> str:
-    orbit_id, file_hash = tuple(kepler_link.replace("kepler://", "").replace('v0:', '').split("/"))
+    orbit_id, file_hash = tuple(kepler_link.replace("kepler://", "").replace("v0:", "").split("/"))
     url = urljoin(KEPLER_ENDPOINT, orbit_id + "/" + file_hash)
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
@@ -116,8 +116,7 @@ async def resolve_claim(kepler_link: str, checksum: str) -> dict[str, Any]:
     if len(errors) > 0:
         raise FailedVerification(claim, str(errors))
 
-    claim_json = json.loads(claim)
-    return claim_json
+    return json.loads(claim)
 
 
 def validate_vc(vc: dict[str, Any], address: str) -> None:
